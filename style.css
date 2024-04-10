@@ -21,16 +21,70 @@ body {
     box-shadow: 0 2em 4em rgba(7, 0, 53, 0.25);
 }
 
-.white-key {
-    width: 4.50em;
+.white {
+    width: 4.4em;
     height: 17.5em;
     background-color: #ffffff;
-    border: 2px solid #24272e;
+    border: 2px solid #23262e;
     border-radius: 0 0 0.3em 0.3em;
     box-sizing: border-box;
     cursor: pointer;
 }
 
-.white-key:hover {
+.white:hover {
     background-color: #ebebeb;
+}
+
+.black {
+    position: absolute;
+    width: 2.5em;
+    height: 10em;
+    border-radius: 0 0 0.3em 0.3em;
+    box-sizing: border-box;
+    background-color: #070a0f;
+    cursor: pointer;
+}
+
+.black:hover {
+    background-color: #24272e;
+}
+
+.black:nth-child(1) {
+    left: 4em;
+}
+
+.black:nth-child(2) {
+    left: 8.37em;
+}
+
+.black:nth-child(3) {
+    left: 17.12em;
+}
+
+.black:nth-child(4) {
+    left: 21.5em;
+}
+
+.black:nth-child(5) {
+    left: 25.87em;
+}
+
+.black:nth-child(6) {
+    left: 34.62em;
+}
+
+.black:nth-child(7) {
+    left: 39em;
+}
+
+.black:nth-child(8) {
+    left: 47.75em;
+}
+
+.black:nth-child(9) {
+    left: 52.12em;
+}
+
+.black:nth-child(10) {
+    left: 56.5em;
 }
