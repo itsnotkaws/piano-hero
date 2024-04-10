@@ -1,0 +1,1 @@
+let pianoContainer = document.getElementsByClassName("piano");
