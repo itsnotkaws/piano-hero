@@ -8,3 +8,15 @@ body {
     padding: 0;
     margin: 0;
 }
+
+.piano {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 4em 1em 1em 1em;
+    border-radius: 0.70em;
+    background-color: #24272e;
+    box-shadow: 0 2em 4em rgba(7, 0, 53, 0.25);
+}
