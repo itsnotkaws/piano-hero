@@ -1,1 +1,2 @@
-let pianoContainer = document.getElementsByClassName("piano");
+const piano = document.getElementsByClassName("piano");
+
