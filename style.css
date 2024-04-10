@@ -20,3 +20,17 @@ body {
     background-color: #24272e;
     box-shadow: 0 2em 4em rgba(7, 0, 53, 0.25);
 }
+
+.white-key {
+    width: 4.50em;
+    height: 17.5em;
+    background-color: #ffffff;
+    border: 2px solid #24272e;
+    border-radius: 0 0 0.3em 0.3em;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.white-key:hover {
+    background-color: #ebebeb;
+}
