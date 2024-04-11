@@ -11,14 +11,12 @@ function midiMessageReceived(event) {
     if (cmd === NOTE_OFF || (cmd === NOTE_ON === 0)) {
         const noteDiv = document.querySelector(`.note${pitch-47}`);
         noteDiv.style.backgroundColor = '';
-
+        console.log(`Key released: ${pitch-47}`);
     } else if (cmd === NOTE_ON) {
         const noteDiv = document.querySelector(`.note${pitch-47}`);
         noteDiv.style.backgroundColor = 'red';
-
-    } else if (cmd === NOTE_ON) {
+        console.log(`Key pressed: ${pitch-47}`);
         //console.log(`🎧 from ${event.srcElement.name} note off: pitch:${pitch}`);
-
         notesOn.set(pitch, timestamp);
     }
 }
@@ -72,7 +70,7 @@ window.onload = () => {
         div.classList.add(`note${i+1}`);
         piano[0].appendChild(div);
         div.addEventListener('click', () => {
-            console.log("test");
+            console.log("Clicked with mouse");
         });
     }
 }
