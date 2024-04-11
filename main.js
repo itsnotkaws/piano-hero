@@ -15,7 +15,7 @@ function midiMessageReceived(event) {
             notesOn.delete(pitch);
         }
     } else if (cmd === NOTE_ON) {
-        console.log(`🎧 from ${event.srcElement.name} note off: pitch:${pitch}`);
+        //console.log(`🎧 from ${event.srcElement.name} note off: pitch:${pitch}`);
 
         notesOn.set(pitch, timestamp);
     }
@@ -56,6 +56,14 @@ function startListening() {
         input.addEventListener('midimessage', midiMessageReceived);
     }
 }
+
+const initBtn = document.querySelector('#init');
+
+function mappingSequences(event) {
+    
+}
+
+initBtn.addEventListener('click', mappingSequences);
 
 window.onload = () => {
     const piano = document.getElementsByClassName("piano");
