@@ -9,20 +9,13 @@ function midiMessageReceived(event) {
     const timestamp = Date.now();
 
     if (cmd === NOTE_OFF || (cmd === NOTE_ON === 0)) {
-        console.log(`🎧 from ${event.srcElement.name} note off: pitch:${pitch}`);
+        const noteDiv = document.querySelector(`.note${pitch-47}`);
+        noteDiv.style.backgroundColor = '';
 
-        const note = notesOn.get(pitch);
-        if (note) {
-            console.log(`🎵 pitch:${pitch}, duration:${timestamp - note} ms.`);
-            notes.push(pitch);
-            for (let i = 1; i < notes.length; i++) {
-                const previousIndex = i - 1;
-                console.log("Previous index :", previousIndex, "value :", notes[previousIndex]);
-                notes.splice(previousIndex, 1);
-            }
-            console.log(notes)
-            notesOn.delete(pitch);
-        }
+    } else if (cmd === NOTE_ON) {
+        const noteDiv = document.querySelector(`.note${pitch-47}`);
+        noteDiv.style.backgroundColor = 'red';
+
     } else if (cmd === NOTE_ON) {
         //console.log(`🎧 from ${event.srcElement.name} note off: pitch:${pitch}`);
 
@@ -66,14 +59,6 @@ function startListening() {
     }
 }
 
-const initBtn = document.querySelector('#init');
-
-function mappingSequences() {
-    // fonction to map the notes
-}
-
-initBtn.addEventListener('click', mappingSequences);
-
 window.onload = () => {
     const piano = document.getElementsByClassName("piano");
     const pattern = ['B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'N', 'B', 'B'];
@@ -84,10 +69,10 @@ window.onload = () => {
         if (pattern[i] === 'N') {
             div.style.left = offset.shift();
         }
+        div.classList.add(`note${i+1}`);
         piano[0].appendChild(div);
         div.addEventListener('click', () => {
             console.log("test");
         });
     }
 }
-
