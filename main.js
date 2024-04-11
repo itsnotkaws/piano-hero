@@ -1,4 +1,5 @@
 const notes = [];
+const pattern = ['B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'N', 'B', 'B'];
 
 function midiMessageReceived(event) {
     const NOTE_ON = 9;
@@ -59,7 +60,6 @@ function startListening() {
 
 window.onload = () => {
     const piano = document.getElementsByClassName("piano");
-    const pattern = ['B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'N', 'B', 'B'];
     const offset = ['4em', '8.37em', '17.12em', '21.5em', '25.87em', '34.62em', '39em', '47.75em', '52.12em', '56.5em'];
     for (let i = 0; i < pattern.length; i++) {
         const div = document.createElement("div");
