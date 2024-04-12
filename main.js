@@ -5,6 +5,7 @@ const mapBtn = document.querySelector('#mapBtn');
 let map = new Map();
 let isMapping = false; 
 let mapCount = 0;
+let isFirstPress = true;
 
 function mapButtonClicked() {
     isMapping = true; 
@@ -32,9 +33,11 @@ function midiMessageReceived(event) {
         const noteDiv = document.querySelector(`.note${pitch-47}`);
         noteDiv.style.backgroundColor = 'red';
         console.log(`Key pressed: ${pitch-47}`);
-        midiKeyPressed(pitch);
-        notesOn.set(pitch, timestamp);
-        mappingKeys(pitch);
+        if (isMapping) {
+            midiKeyPressed(pitch);
+            notesOn.set(pitch, timestamp);
+            mappingKeys(pitch);
+        }
         //console.log(`🎧 from ${event.srcElement.name} note off: pitch:${pitch}`);
     }
 }
@@ -69,8 +72,16 @@ function midiKeyPressed(pitch) {
             console.log(`Key pressed: ${pitch-47}`);
             if (noteDiv.classList.contains(`note${mapCount}`) && (pitch - 47) === mapCount) {
                 console.log("Correct key pressed");
+                isKeyPressed = true;
             } else {
-                console.log("Incorrect key pressed");
+                if (isFirstPress) {
+                    isFirstPress = false;
+                } else {
+                    if (!isKeyPressed) {
+                        console.log("Incorrect key pressed");
+                        isKeyPressed = true;
+                    }
+                }
             }
         }
     }
