@@ -14,21 +14,67 @@ function mapButtonClicked() {
     mappingKeys();
 }
 
-function mappingKeys() {
+function midiMessageReceived(event) {
+    const NOTE_ON = 9;
+    const NOTE_OFF = 8;
+
+    const cmd = event.data[0] >> 4;
+    const pitch = event.data[1];
+    const timestamp = Date.now();
+
+    if (cmd === NOTE_OFF || (cmd === NOTE_ON === 0)) {
+        const noteDiv = document.querySelector(`.note${pitch-47}`);
+        if (noteDiv) {
+            noteDiv.style.backgroundColor = '';
+            console.log(`Key released: ${pitch-47}`);
+        }
+    } else if (cmd === NOTE_ON) {
+        // const noteDiv = document.querySelector(`.note${pitch-47}`);
+        // noteDiv.style.backgroundColor = 'red';
+        // console.log(`Key pressed: ${pitch-47}`);
+        midiKeyPressed(pitch);
+        notesOn.set(pitch, timestamp);
+        mappingKeys(pitch);
+        //console.log(`🎧 from ${event.srcElement.name} note off: pitch:${pitch}`);
+    }
+}
+
+const notesOn = new Map();
+
+function mappingKeys(pitch) {
     if (isMapping) {
         const noteDiv = document.querySelector(`.note${mapCount+1}`);
-        noteDiv.style.backgroundColor = 'yellow';
-        mapCount++;
-        if (mapCount === pattern.length) {
-            alert("Le mappage est fini.");
-            isMapping = false;
-            mapBtn.disabled = false;
-            mapBtn.innerText = "map";
-        } else {
-            noteDiv.addEventListener('click', mappingNextKeys); 
+        if (noteDiv) {
+            noteDiv.style.backgroundColor = 'yellow';
+            mapCount++;
+            if (mapCount === pattern.length) {
+                alert("Le mappage est fini.");
+                isMapping = false;
+                mapBtn.disabled = false;
+                mapBtn.innerText = "map";
+            } else {
+                midiKeyPressed(pitch);
+            }
         }
     } else if (mapCount === 25) {
         alert("Le mappage est fini.");
+    }
+}
+
+function midiKeyPressed(pitch) {
+    if (isMapping) {
+        const noteDiv = document.querySelector(`.note${mapCount}`);
+        if (noteDiv) {
+            noteDiv.style.backgroundColor = 'red';
+            console.log(`Key pressed: ${pitch-47}`);
+            if (pattern[mapCount] === 'B' && pitch - 47) {
+                console.log("Correct key pressed");
+            } else if (pattern[mapCount] === 'N' && pitch - 47) {
+                console.log("Correct key pressed");
+            } else {
+                console.log("Incorrect key pressed");
+            }
+        }
     }
 }
 
@@ -40,29 +86,6 @@ function mappingNextKeys() {
 }
 
 mapBtn.addEventListener('click', mapButtonClicked);
-
-function midiMessageReceived(event) {
-    const NOTE_ON = 9;
-    const NOTE_OFF = 8;
-
-    const cmd = event.data[0] >> 4;
-    const pitch = event.data[1];
-    const timestamp = Date.now();
-
-    if (cmd === NOTE_OFF || (cmd === NOTE_ON === 0)) {
-        const noteDiv = document.querySelector(`.note${pitch-47}`);
-        noteDiv.style.backgroundColor = '';
-        console.log(`Key released: ${pitch-47}`);
-    } else if (cmd === NOTE_ON) {
-        const noteDiv = document.querySelector(`.note${pitch-47}`);
-        noteDiv.style.backgroundColor = 'red';
-        console.log(`Key pressed: ${pitch-47}`);
-        //console.log(`🎧 from ${event.srcElement.name} note off: pitch:${pitch}`);
-        notesOn.set(pitch, timestamp);
-    }
-}
-
-const notesOn = new Map();
 
 function onMIDISuccess(midiAccess) {
     console.log('MIDI Access Granted');
