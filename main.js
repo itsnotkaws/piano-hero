@@ -6,6 +6,7 @@ let map = new Map();
 let isMapping = false; 
 let mapCount = 0;
 let isFirstPress = true;
+let isKeyPressed = false;
 
 function mapButtonClicked() {
     isMapping = true; 
@@ -69,7 +70,9 @@ function midiKeyPressed(pitch) {
         const noteDiv = document.querySelector(`.note${mapCount}`);
         if (noteDiv) {
             noteDiv.style.backgroundColor = 'yellow';
-            console.log(`Key pressed: ${pitch-47}`);
+            if (!isFirstPress || !isNaN(pitch)) {
+                console.log(`Key pressed: ${pitch-47}`);
+            }
             if (noteDiv.classList.contains(`note${mapCount}`) && (pitch - 47) === mapCount) {
                 console.log("Correct key pressed");
                 isKeyPressed = true;
