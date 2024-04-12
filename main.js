@@ -5,16 +5,16 @@ const mapBtn = document.querySelector('#mapBtn');
 let map = new Map();
 let isMapping = false; 
 let mapCount = 0;
-let isFirstPress = true;
-let isKeyPressed = false;
 
 function mapButtonClicked() {
     isMapping = true; 
     mapBtn.innerText = "mapping"; 
     mapBtn.disabled = true;
-    // alert("Toutes modifications est cruciale pour l'expérience utilisateur.");
+    alert("Toutes modifications est cruciale pour l'expérience utilisateur.");
     mappingKeys();
 }
+
+mapBtn.addEventListener('click', mapButtonClicked);
 
 function midiMessageReceived(event) {
     const NOTE_ON = 9;
@@ -22,30 +22,22 @@ function midiMessageReceived(event) {
 
     const cmd = event.data[0] >> 4;
     const pitch = event.data[1];
-    const timestamp = Date.now();
 
     if (cmd === NOTE_OFF || (cmd === NOTE_ON === 0)) {
         const noteDiv = document.querySelector(`.note${pitch-47}`);
         if (noteDiv) {
             noteDiv.style.backgroundColor = '';
-            // console.log(`Key released: ${pitch-47}`);
         }
     } else if (cmd === NOTE_ON) {
         const noteDiv = document.querySelector(`.note${pitch-47}`);
         noteDiv.style.backgroundColor = 'red';
-        console.log(`Key pressed: ${pitch-47}`);
         if (isMapping) {
-            midiKeyPressed(pitch);
-            notesOn.set(pitch, timestamp);
-            mappingKeys(pitch);
+            mappingKeys();
         }
-        //console.log(`🎧 from ${event.srcElement.name} note off: pitch:${pitch}`);
     }
 }
 
-const notesOn = new Map();
-
-function mappingKeys(pitch) {
+function mappingKeys() {
     if (isMapping) {
         const noteDiv = document.querySelector(`.note${mapCount+1}`);
         if (noteDiv) {
@@ -57,7 +49,7 @@ function mappingKeys(pitch) {
                 mapBtn.disabled = false;
                 mapBtn.innerText = "map";
             } else {
-                midiKeyPressed(pitch);
+                midiKeyPressed();
             }
         }
     } else if (mapCount === 25) {
@@ -65,39 +57,21 @@ function mappingKeys(pitch) {
     }
 }
 
-function midiKeyPressed(pitch) {
+function midiKeyPressed() {
     if (isMapping) {
-        const noteDiv = document.querySelector(`.note${mapCount}`);
-        if (noteDiv) {
-            noteDiv.style.backgroundColor = 'yellow';
-            if (!isFirstPress || !isNaN(pitch)) {
-                console.log(`Key pressed: ${pitch-47}`);
-            }
-            if (noteDiv.classList.contains(`note${mapCount}`) && (pitch - 47) === mapCount) {
-                console.log("Correct key pressed");
-                isKeyPressed = true;
-            } else {
-                if (isFirstPress) {
-                    isFirstPress = false;
-                } else {
-                    if (!isKeyPressed) {
-                        console.log("Incorrect key pressed");
-                        isKeyPressed = true;
-                    }
-                }
-            }
+        const currentNoteDiv = document.querySelector(`.note${mapCount}`);
+        const nextNoteDiv = document.querySelector(`.note${mapCount+1}`);
+        
+        if (currentNoteDiv) {
+            currentNoteDiv.style.backgroundColor = '';
+        }
+        
+        if (nextNoteDiv) {
+            nextNoteDiv.style.backgroundColor = 'yellow';
         }
     }
 }
 
-function mappingNextKeys() {
-    const noteDiv = document.querySelector(`.note${mapCount}`);
-    noteDiv.style.backgroundColor = '';
-    noteDiv.removeEventListener('click', mappingNextKeys);
-    mappingKeys();
-}
-
-mapBtn.addEventListener('click', mapButtonClicked);
 
 function onMIDISuccess(midiAccess) {
     console.log('MIDI Access Granted');
@@ -116,12 +90,16 @@ function initDevices(midiAccess) {
 
     const inputs = midiAccess.inputs.values();
     for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
-        midiIn.push(input.value);
+        const inputDevice = input.value;
+        console.log('Connected MIDI Input:', inputDevice.name);
+        midiIn.push(inputDevice);
     }
 
     const outputs = midiAccess.outputs.values();
     for (let output = outputs.next(); output && !output.done; output = outputs.next()) {
-        midiOut.push(output.value);
+        const outputDevice = output.value;
+        console.log('Connected MIDI Output:', outputDevice.name);
+        midiOut.push(outputDevice);
     }
 
     startListening();
@@ -144,8 +122,5 @@ window.onload = () => {
         }
         div.classList.add(`note${i+1}`);
         piano[0].appendChild(div);
-        div.addEventListener('click', () => {
-            console.log("Clicked with mouse");
-        });
     }
 }
