@@ -26,12 +26,12 @@ function midiMessageReceived(event) {
         const noteDiv = document.querySelector(`.note${pitch-47}`);
         if (noteDiv) {
             noteDiv.style.backgroundColor = '';
-            console.log(`Key released: ${pitch-47}`);
+            // console.log(`Key released: ${pitch-47}`);
         }
     } else if (cmd === NOTE_ON) {
-        // const noteDiv = document.querySelector(`.note${pitch-47}`);
-        // noteDiv.style.backgroundColor = 'red';
-        // console.log(`Key pressed: ${pitch-47}`);
+        const noteDiv = document.querySelector(`.note${pitch-47}`);
+        noteDiv.style.backgroundColor = 'red';
+        console.log(`Key pressed: ${pitch-47}`);
         midiKeyPressed(pitch);
         notesOn.set(pitch, timestamp);
         mappingKeys(pitch);
@@ -65,11 +65,9 @@ function midiKeyPressed(pitch) {
     if (isMapping) {
         const noteDiv = document.querySelector(`.note${mapCount}`);
         if (noteDiv) {
-            noteDiv.style.backgroundColor = 'red';
+            noteDiv.style.backgroundColor = 'yellow';
             console.log(`Key pressed: ${pitch-47}`);
-            if (pattern[mapCount] === 'B' && pitch - 47) {
-                console.log("Correct key pressed");
-            } else if (pattern[mapCount] === 'N' && pitch - 47) {
+            if (noteDiv.classList.contains(`note${mapCount}`) && (pitch - 47) === mapCount) {
                 console.log("Correct key pressed");
             } else {
                 console.log("Incorrect key pressed");
