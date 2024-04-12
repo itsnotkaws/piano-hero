@@ -39,6 +39,7 @@ body {
     position: absolute;
     width: 2.5em;
     height: 10em;
+    border: 2px solid #23262e;
     border-radius: 0 0 0.3em 0.3em;
     box-sizing: border-box;
     background-color: #070a0f;

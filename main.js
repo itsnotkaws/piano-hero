@@ -1,6 +1,46 @@
 const notes = [];
 const pattern = ['B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'B', 'N', 'B', 'N', 'B', 'N', 'B', 'B'];
 
+const mapBtn = document.querySelector('#mapBtn');
+let map = new Map();
+let isMapping = false; 
+let mapCount = 0;
+
+function mapButtonClicked() {
+    isMapping = true; 
+    mapBtn.innerText = "mapping"; 
+    mapBtn.disabled = true;
+    // alert("Toutes modifications est cruciale pour l'expérience utilisateur.");
+    mappingKeys();
+}
+
+function mappingKeys() {
+    if (isMapping) {
+        const noteDiv = document.querySelector(`.note${mapCount+1}`);
+        noteDiv.style.backgroundColor = 'yellow';
+        mapCount++;
+        if (mapCount === pattern.length) {
+            alert("Le mappage est fini.");
+            isMapping = false;
+            mapBtn.disabled = false;
+            mapBtn.innerText = "map";
+        } else {
+            noteDiv.addEventListener('click', mappingNextKeys); 
+        }
+    } else if (mapCount === 25) {
+        alert("Le mappage est fini.");
+    }
+}
+
+function mappingNextKeys() {
+    const noteDiv = document.querySelector(`.note${mapCount}`);
+    noteDiv.style.backgroundColor = '';
+    noteDiv.removeEventListener('click', mappingNextKeys);
+    mappingKeys();
+}
+
+mapBtn.addEventListener('click', mapButtonClicked);
+
 function midiMessageReceived(event) {
     const NOTE_ON = 9;
     const NOTE_OFF = 8;
